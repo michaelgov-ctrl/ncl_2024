@@ -7,6 +7,9 @@ import (
 	"os"
 )
 
+// https://en.wikipedia.org/wiki/RSA_(cryptosystem)#Operation
+// https://trove.cyberskyline.com/fafad0e3926b4f808e7616039ca6a6af
+
 // go build -ldflags '-s'
 func main() {
 	var n, e int
