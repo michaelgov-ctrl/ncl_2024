@@ -4,10 +4,11 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
+	"os"
 	"sync"
 )
 
-func worker(wg *sync.WaitGroup, strings []string) {
+func worker(wg *sync.WaitGroup, hashes *appMap, strings []string) {
 	defer wg.Done()
 
 	for _, str := range strings {
@@ -21,7 +22,8 @@ func worker(wg *sync.WaitGroup, strings []string) {
 		if ok {
 			hashes.incFound()
 			if hashes.allFound() {
-				//TODO stop all processing
+				fmt.Println(hashes.m)
+				os.Exit(0)
 			}
 			fmt.Printf("%s: %s\n", hex.EncodeToString(hash[:]), str)
 		}

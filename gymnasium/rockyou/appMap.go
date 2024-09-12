@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"errors"
+	"io"
 	"sync"
 )
 
@@ -12,8 +14,22 @@ type appMap struct {
 	found int
 }
 
-func (am *appMap) new() {
+func newAppMap() *appMap {
+	var am appMap
 	am.m = map[string]string{}
+
+	return &am
+}
+
+func loadNewAppMap(r io.Reader) *appMap {
+	am := newAppMap()
+
+	scanner := bufio.NewScanner(r)
+	for scanner.Scan() {
+		am.store(scanner.Text(), "")
+	}
+
+	return am
 }
 
 func (am *appMap) incFound() {
