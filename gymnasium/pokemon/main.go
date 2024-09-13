@@ -31,7 +31,7 @@ func main() {
 	w := bufio.NewWriter(wl)
 	for _, r := range records {
 		if r[1] != "" {
-			_, err := w.WriteString(fmt.Sprintf("%s%s\n", r[0], strings.TrimLeft(r[1], "#0")))
+			_, err := w.WriteString(fmt.Sprintf("%s%s\n", strings.ToLower(r[0]), strings.TrimLeft(r[1], "#0")))
 			if err != nil {
 				log.Fatal(err)
 			}
