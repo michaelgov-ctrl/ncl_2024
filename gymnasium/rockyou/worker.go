@@ -20,12 +20,13 @@ func worker(wg *sync.WaitGroup, hashes *appMap, strings []string) {
 		}
 
 		if ok {
+			fmt.Printf("%s: %s\n", hex.EncodeToString(hash[:]), str)
+
 			hashes.incFound()
 			if hashes.allFound() {
 				fmt.Println(hashes.m)
 				os.Exit(0)
 			}
-			fmt.Printf("%s: %s\n", hex.EncodeToString(hash[:]), str)
 		}
 	}
 }
