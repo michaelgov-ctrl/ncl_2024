@@ -2,29 +2,40 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"log"
 	"os"
 	"sync"
 )
 
-var hashes appMap
-
 func main() {
-	hashes.new()
-	hashes.store("68a96446a5afb4ab69a2d15091771e39", "")
-	hashes.store("ec5f0b1826389df8622133014e88afde", "")
-	hashes.store("32e5f63b189b78dccf0b97ac41f0d228", "")
-	hashes.store("2233287f476ba63323e60addca1f6b64", "")
-	hashes.store("6539bbb84fe2de2628fc5e4f2a31f23a", "")
+	var hashesFilename, wordlistFilename string
+	flag.StringVar(&hashesFilename, "hashes", "", "REQUIRED: filepath to hashes file")
+	flag.StringVar(&wordlistFilename, "wordlist", "", "REQUIRED: filepath to wordlist file")
 
-	file, err := os.Open("rockyou.txt")
+	flag.Parse()
+
+	if hashesFilename == "" || wordlistFilename == "" {
+		flag.Usage()
+		os.Exit(1)
+	}
+
+	hashlist, err := os.Open(hashesFilename)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer file.Close()
+	defer hashlist.Close()
 
-	scanner := bufio.NewScanner(file)
+	hashes := loadNewAppMap(hashlist)
+
+	wordlist, err := os.Open(wordlistFilename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer wordlist.Close()
+
+	scanner := bufio.NewScanner(wordlist)
 
 	var (
 		workerSliceLen = 500
@@ -39,7 +50,7 @@ func main() {
 		}
 
 		wg.Add(1)
-		go worker(&wg, buffer)
+		go worker(&wg, hashes, buffer)
 
 		buffer = make([]string, workerSliceLen)
 		buffer[0] = scanner.Text()
@@ -48,6 +59,11 @@ func main() {
 
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
+	}
+
+	if 0 < len(buffer) {
+		wg.Add(1)
+		go worker(&wg, hashes, buffer)
 	}
 
 	wg.Wait()
