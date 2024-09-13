@@ -1,0 +1,20 @@
+step 1: extract archive
+	bash: unzip
+	pwsh: Expand-Archive
+		Expand-Arcive git_backup.zip
+
+step 2: email of compromised employees
+	ls .git/logs/refs/heads/master
+
+step 3: find compromised flag
+	based on commits its clear that FLAG.txt was commit one commit ago
+	rollback one commit:
+		git checkout -f HEAD~1
+		ls FLAG.txt
+
+step 3: find compromised password
+	list all branches:
+		git branch --all
+	switch:
+		git checkout next
+		ls passwords.txt
