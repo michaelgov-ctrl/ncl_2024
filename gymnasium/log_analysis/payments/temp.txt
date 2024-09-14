@@ -1,0 +1,30 @@
+PPAPIService: Request: <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="urn:ebay:api:PayPalAPI" xmlns:ebl="urn:ebay:apis:eBLBaseComponents" xmlns:cc="urn:ebay:apis:CoreComponentTypes" xmlns:ed="urn:ebay:apis:EnhancedDataTypes" ><soapenv:Header><ns:RequesterCredentials><ebl:Credentials><ebl:Username>sobhagya-facilitator_api1.outlook.com</ebl:Username><ebl:Password>PDR9FTWWU6FDBNKY</ebl:Password><ebl:Signature>ANGx9fhOMuIxwcbkuUqPMh-9L15RAO6JJD8BDCZSxcx8nbBWeDOIbzW1</ebl:Signature></ebl:Credentials></ns:RequesterCredentials></soapenv:Header><soapenv:Body><ns:DoDirectPaymentReq><ns:DoDirectPaymentRequest><ebl:DoDirectPaymentRequestDetails><ebl:PaymentAction>Sale</ebl:PaymentAction><ebl:PaymentDetails><ebl:OrderTotal currencyID="USD">620.41</ebl:OrderTotal><ebl:ButtonSource>PayPal_SDK</ebl:ButtonSource><ebl:ShipToAddress><ebl:Name>Hunter Hansen</ebl:Name><ebl:Street1>10455 Jessica Road</ebl:Street1><ebl:CityName>South Katheryn</ebl:CityName><ebl:StateOrProvince>CO</ebl:StateOrProvince><ebl:Country>US</ebl:Country><ebl:PostalCode>96144</ebl:PostalCode></ebl:ShipToAddress>
+                </ebl:PaymentDetails><ebl:CreditCard><ebl:CreditCardType>Visa</ebl:CreditCardType><ebl:CreditCardLastFourDigits>9965</ebl:CreditCardLastFourDigits><ebl:ExpMonth>9</ebl:ExpMonth><ebl:ExpYear>2019</ebl:ExpYear>
+                    <ebl:CardOwner>
+                        <ebl:PayerName><ebl:FirstName>Hunter</ebl:FirstName><ebl:LastName>Hansen</ebl:LastName></ebl:PayerName><ebl:PayerCountry>US</ebl:PayerCountry><ebl:Address><ebl:Name>Hunter Hansen</ebl:Name><ebl:Street1>10455 Jessica Road</ebl:Street1><ebl:CityName>South Katheryn</ebl:CityName><ebl:StateOrProvince>CO</ebl:StateOrProvince><ebl:Country>US</ebl:Country><ebl:PostalCode>96144</ebl:PostalCode></ebl:Address>
+                    </ebl:CardOwner>
+                    <ebl:CVV2>314</ebl:CVV2>
+                    </ebl:CreditCard>
+                </ebl:DoDirectPaymentRequestDetails>
+                <ebl:Version>117.0</ebl:Version>
+            </ns:DoDirectPaymentRequest>
+        </ns:DoDirectPaymentReq>
+    </soapenv:Body>
+</soapenv:Envelope>
+PPHttpConnection: Connecting to https://api-3t.paypal.com/2.0
+PPHttpConnection: Adding header X-PAYPAL-REQUEST-DATA-FORMAT: SOAP
+PPHttpConnection: Adding header X-PAYPAL-RESPONSE-DATA-FORMAT: SOAP
+PPHttpConnection: Adding header X-PAYPAL-DEVICE-IPADDRESS: ::1
+PPHttpConnection: Adding header X-PAYPAL-REQUEST-SOURCE: merchant-sdk-php-2.11.118
+PPAPIService: Response: <?xml version="1.0" encoding="UTF-8"?><SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cc="urn:ebay:apis:CoreComponentTypes" xmlns:wsu="http://schemas.xmlsoap.org/ws/2002/07/utility" xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:wsse="http://schemas.xmlsoap.org/ws/2002/12/secext" xmlns:ed="urn:ebay:apis:EnhancedDataTypes" xmlns:ebl="urn:ebay:apis:eBLBaseComponents" xmlns:ns="urn:ebay:api:PayPalAPI"><SOAP-ENV:Header><Security xmlns="http://schemas.xmlsoap.org/ws/2002/12/secext" xsi:type="wsse:SecurityType"></Security><RequesterCredentials xmlns="urn:ebay:api:PayPalAPI" xsi:type="ebl:CustomSecurityHeaderType"><Credentials xmlns="urn:ebay:apis:eBLBaseComponents" xsi:type="ebl:UserIdPasswordType"><Username xsi:type="xs:string"></Username><Password xsi:type="xs:string"></Password><Signature xsi:type="xs:string"></Signature><Subject xsi:type="xs:string"></Subject></Credentials></RequesterCredentials></SOAP-ENV:Header><SOAP-ENV:Body id="_0"><DoDirectPaymentResponse xmlns="urn:ebay:api:PayPalAPI">
+            <Ack xmlns="urn:ebay:apis:eBLBaseComponents">Success</Ack>
+            <CorrelationID xmlns="urn:ebay:apis:eBLBaseComponents">9de9df21-4824-43d6-a802-70a6f39e3a5d</CorrelationID>
+            <Version xmlns="urn:ebay:apis:eBLBaseComponents">117.0</Version>
+            <Build xmlns="urn:ebay:apis:eBLBaseComponents">16204765</Build>
+            <Amount xsi:type="cc:BasicAmountType" currencyID="USD">1.00</Amount>
+            <AVSCode xsi:type="xs:string">X</AVSCode>
+            <CVV2Code xsi:type="xs:string">M</CVV2Code>
+            <TransactionID>c75d2046-01c2-44ac-bd57-ddcf7f7fcfef</TransactionID>
+        </DoDirectPaymentResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

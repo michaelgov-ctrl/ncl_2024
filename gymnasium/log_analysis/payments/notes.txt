@@ -1,0 +1,20 @@
+takeaway:
+    this was easiest with just ad-hoc powershell commands, but if parsing this log was a regular occurence I'd marshal to struct with `xml` tags in go
+
+1. How many transactions are contained in the log?
+    pwsh Get-Content .\payments.log | ? {$_ -match "PPAPIService: Request"} | Measure-Object
+
+2. What is the transaction ID of the largest purchase made in the log?
+    $almostthere = Get-Content .\payments.log | ? {$_ -match "</ebl:OrderTotal>"} | % {($_ -split "</ebl:OrderTotal>")[0]}
+    $vals = foreach ($s in $almostthere) {
+        $temp = $s.Split(">")
+        $temp[$temp.Count-1]
+    }
+
+    $max = ($vals | Sort-Object {[int]($_ -replace '(\d+).*', '$1')} -Descending)[0]
+    vscode ctrl+f $max find response
+
+3. Which state made the greatest number of purchases?
+    get-content .\payments.log | ? {$_ -match "PPAPIService: Request:"} | % {($_ -split "</ebl:StateOrProvince>")[0]} | % {$_.Substring($_.length-2)} | Group-Object | Sort-Object
+ -Property Count
+    

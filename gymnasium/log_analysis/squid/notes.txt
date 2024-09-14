@@ -1,0 +1,21 @@
+1. In what year was this log saved?
+    epoch time converter final entry: 1286536351.746
+
+2. How many milliseconds did the fastest request take?
+    pwsh Get-Content .\squid_access.log | % {($_.Split(" ",[System.StringSplitOptions]::RemoveEmptyEntries))[1]} | Sort-Object {[int]($_ -replace '(\d+).*', '$1')} -Descending
+
+3. How many milliseconds did the longest request take?
+    Get-Content .\squid_access.log | % {($_.Split(" ",[System.StringSplitOptions]::RemoveEmptyEntries))[1]} | Sort-Object {[int]($_ -replace '(\d+).*', '$1')}
+
+4. How many different IP addresses did the proxy service in this log?
+    Get-Content .\squid_access.log | % {($_.Split(" ",[System.StringSplitOptions]::RemoveEmptyEntries))[2]} | Sort-Object | Group-Object
+
+5. How many GET requests were made?
+6. How many POST requests were made?
+    Get-Content .\squid_access.log | % {($_.Split(" ",[System.StringSplitOptions]::RemoveEmptyEntries))[5]} | Sort-Object | Group-Object
+
+7. What company created the antivirus used on the host at 192.168.0.224?
+    vscode ctrl+f 192.168.0.224 or Get-Content .\squid_access.log | ? {$_ -match "192.168.0.224"}
+
+8. What url is used to download an antivirus update?
+    Get-Content .\squid_access.log | ? {$_ -match "192.168.0.224" -and $_ -match "application/zip"}

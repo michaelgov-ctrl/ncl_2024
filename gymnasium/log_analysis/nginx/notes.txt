@@ -1,0 +1,30 @@
+pwsh solutions
+
+1. How many different IP addresses reached the server?/
+    Get-Content .\access.log | % { ($_ -split "-")[0] } | Sort-Object -Unique | Measure-Object
+
+2. How many requests yielded a 200 status?
+3. How many requests yielded a 400 status?
+    Get-Content .\access.log | % { (($_ -split '"')[2] -split " ")[1] } | Sort-Object | Group-Object
+
+4. What IP address rang at the doorbell?
+    vscode ctrl+f ring
+
+5. What version of the Googlebot visited the website?
+    vscode ctrl+f googlebot
+
+6. Which IP address attempted to exploit the shellshock vulnerability?
+    https://en.wikipedia.org/wiki/Shellshock_(software_bug)
+    `env x='() { :;}; echo vulnerable' bash -c "echo this is a test"`
+
+    vscode ctrl+f ()
+
+7. What was the most popular version of Firefox used for browsing the website?
+    ((get-content .\access.log | ? {$_ -match "Firefox"}) | % {($_ -split "FireFox")[1]}) | Group-Object
+
+8. What is the most common HTTP method used?
+9. What is the second most common HTTP method used?
+    Get-Content .\access.log | % { (($_ -split '"')[1] -split " ")[0] } | Group-Object
+
+10. How many requests were for \x04\x01\x00P\xC6\xCE\x0Eu0\x00?
+    vscode ctrl+f \x04\x01\x00P\xC6\xCE\x0Eu0\x00
