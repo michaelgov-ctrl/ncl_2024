@@ -1,0 +1,37 @@
+1. How many total login attempts were made in this log?
+    pwsh Get-Content .\login.log | Measure-Object
+
+2. How many unique usernames appear in this log?
+    Get-Content .\login.log | % {($_ -split '\s')[3]} | Sort-Object -Unique | Measure-Object
+
+3. What is the username with the most login attempts?
+4. How many attempts were made for the username with the most login attempts?
+    Get-Content .\login.log | % {($_ -split '\s')[3]} | Group-Object | Sort-Object -Property Count
+
+5. What is the date with the most login attempts?
+    Get-Content .\login.log | % {($_ -split '\s')[0]} | Group-Object | Sort-Object -Property Count
+
+6. What is the username that had logins from the most unique IP addresses?
+    $log = Get-Content .\login.log
+
+    $hash = @{}
+    foreach ($l in $log) {
+        $fields = $l -split '\s'
+        $hash[$fields[3]] = @{}
+    }
+
+    $max = 0
+    foreach ($l in $log) {
+        $fields = $l -split '\s'
+        $hash[$fields[3]][$fields[2]]+=1
+        
+        if ($hash[$fields[3]].count -gt $max) {
+            $max = $hash[$fields[3]].count
+            $entryToCareAbout = [pscustomobject]@{
+                user = $fields[3]
+                ips = $hash[$fields[3]]
+            }
+        }
+    }
+
+    $entryToCareAbout

@@ -1,0 +1,3 @@
+What is the plaintext flag in the log file?
+    base64 encoded
+
