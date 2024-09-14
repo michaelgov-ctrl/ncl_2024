@@ -1,10 +1,12 @@
 package main
 
 import (
+	"encoding/base64"
 	"encoding/binary"
 	"fmt"
 	"net"
 	"os"
+	"time"
 
 	"github.com/ghostiam/binstruct"
 )
@@ -12,7 +14,7 @@ import (
 type Header struct {
 	Magic        []byte `bin:"len:8"`
 	Version      uint8  `bin:"len:1"`
-	Timestamp    []byte `bin:"len:4"`
+	Timestamp    uint32 `bin:"len:4"`
 	HostnameLen  uint32 `bin:"len:4"`
 	Hostname     []byte `bin:"len:HostnameLen"`
 	FlagLen      uint32 `bin:"len:4"`
@@ -23,7 +25,7 @@ type Header struct {
 type BodyItem struct {
 	SourceIp         uint32 `bin:"len:4"`
 	DestIp           uint32 `bin:"len:4"`
-	Timestamp        []byte `bin:"len:4"`
+	Timestamp        uint32 `bin:"len:4"`
 	BytesTransferred uint32 `bin:"len:4"`
 }
 
@@ -51,12 +53,16 @@ func main() {
 	var totalTransferredBytes int
 	uniqueIps := make(map[string]bool)
 	ipSentData := make(map[string]int)
+	dayCounter := make(map[string]int)
 	for _, l := range logs {
 		totalTransferredBytes += l.BytesTransferred
 		uniqueIps[l.DestIp.String()] = true
 		uniqueIps[l.SourceIp.String()] = true
 
 		ipSentData[l.SourceIp.String()] += l.BytesTransferred
+
+		y, m, d := l.Timestamp.Date()
+		dayCounter[fmt.Sprintf("%d-%d-%d", y, m, d)] += l.BytesTransferred
 	}
 
 	mostSent, bigSender := 0, ""
@@ -66,17 +72,31 @@ func main() {
 		}
 	}
 
+	fmt.Println(dayCounter)
+	busiestDay, bigDay := 0, ""
+	for k, v := range dayCounter {
+		if busiestDay < v {
+			bigDay, busiestDay = k, v
+		}
+	}
+
+	flag, _ := base64.StdEncoding.DecodeString(string(sp.Flag))
+
 	//fmt.Printf("%+v\n", sp)
+	fmt.Println("file created on: ", time.Unix(int64(sp.Timestamp), 0))
+	fmt.Println("hostname: ", string(sp.Hostname))
+	fmt.Println("flag: ", string(flag))
 	fmt.Println("totalTransferredBytes: ", totalTransferredBytes)
 	fmt.Println("entries in the log file: ", len(logs))
 	fmt.Println("num of unique ips: ", len(uniqueIps))
 	fmt.Println("biggest sender: ", bigSender, "sent: ", mostSent)
+	fmt.Println("busiest day: ", bigDay)
 }
 
 type log struct {
 	SourceIp         net.IP
 	DestIp           net.IP
-	Timestamp        []byte `bin:"len:4"`
+	Timestamp        time.Time
 	BytesTransferred int
 }
 
@@ -89,10 +109,12 @@ func parseLogs(items []BodyItem) []log {
 		destip := make(net.IP, 4)
 		binary.BigEndian.PutUint32(destip, item.SourceIp)
 
+		fmt.Println()
 		logs[idx] = log{
 			SourceIp:         sourceip,
 			DestIp:           destip,
 			BytesTransferred: int(item.BytesTransferred),
+			Timestamp:        time.Unix(int64(item.Timestamp), 0),
 		}
 	}
 
