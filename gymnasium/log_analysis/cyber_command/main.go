@@ -72,7 +72,7 @@ func main() {
 		}
 	}
 
-	fmt.Println(dayCounter)
+	fmt.Println(len(dayCounter))
 	busiestDay, bigDay := 0, ""
 	for k, v := range dayCounter {
 		if busiestDay < v {
